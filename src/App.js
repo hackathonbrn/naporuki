@@ -21,7 +21,7 @@ function App() {
       setAuth(false);
       return;
     };
-    const apiUrl = "http://go:8080/check-auth";
+    const apiUrl = "http://api:8080/check-auth";
     axios.post(apiUrl).then((resp) => {
       if (resp.data === true) setAuth(true);
     });
