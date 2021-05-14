@@ -2,6 +2,6 @@ server {
     listen ${NGINX_PORT};
 
     location / {
-        proxy_pass http://web:8080;
+        proxy_pass http://react:3000;
     }
 }

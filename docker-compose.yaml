@@ -5,7 +5,7 @@ services:
     volumes:
       - ./.db:/data/db
 
-  web:
+  api:
     build: .
     environment:
       DB_CONNECT_URL: mongodb://db:27017
@@ -13,8 +13,18 @@ services:
     depends_on:
       - db
 
+  react:
+    build:
+      context: .
+      dockerfile: Dockerfile.react
+    volumes:
+      - './:/app'
+      - '/app/node_modules'
+    depends_on:
+      - api
+
   nginx:
-    image: nginx:stable
+    image: nginx:stable-alpine
     volumes:
       - ./nginx:/etc/nginx/templates
     ports:
@@ -22,4 +32,4 @@ services:
     environment:
       - NGINX_PORT=80
     depends_on:
-      - web
+      - react
