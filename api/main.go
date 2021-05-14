@@ -10,6 +10,8 @@ func main() {
 	http.HandleFunc("/register-teacher", registerTeacherHandler)
 	http.HandleFunc("/register-student", registerStudentHandler)
 
+	http.HandleFunc("/check-auth", checkAuthHandler)
+
 	http.HandleFunc("/add-test-teacher", addTestTeacherHandler)
 	http.HandleFunc("/add-test-student", addTestStudentHandler)
 

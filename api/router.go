@@ -111,12 +111,21 @@ func checkPasswordHash(password, hash string) bool {
 	return err == nil
 }
 
+func checkAuthHandler(w http.ResponseWriter, r *http.Request) {
+	_, err := getJWTtokenFromCookies(r.Cookies())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	fmt.Fprint(w, "true")
+}
+
 func addTestTeacherHandler(w http.ResponseWriter, r *http.Request) {
 	if err := addTestTeacher(); err != nil {
 		e := fmt.Sprintf("cannot add test teacher: %v", err)
 		http.Error(w, e, http.StatusInternalServerError)
 	}
-	fmt.Fprint(w, "success\n")
+	fmt.Fprint(w, "success")
 }
 
 func addTestStudentHandler(w http.ResponseWriter, r *http.Request) {
@@ -124,5 +133,5 @@ func addTestStudentHandler(w http.ResponseWriter, r *http.Request) {
 		e := fmt.Sprintf("cannot add test student: %v", err)
 		http.Error(w, e, http.StatusInternalServerError)
 	}
-	fmt.Fprint(w, "success\n")
+	fmt.Fprint(w, "success")
 }
