@@ -1,0 +1,90 @@
+// USER VARIABLES SECTION
+
+$accent: #f95732
+$light: #f9f9f9
+$dark: #171813
+$fontsize: 16px // Body Font Size
+$textcolor: $dark // Text Color
+$lineheight: 1.65 // Document Line Height
+$userfont: Montserrat, sans-serif // User Font Family
+$systemfont: -apple-system, BlinkMacSystemFont, Arial, sans-serif // System Font Family
+
+// Bootstrap compatible gutter variable => $gutter
+$grid-gutter-width: 30px
+$gutter: $grid-gutter-width
+
+// IMPORT SECTION
+
+@import 'node_modules/bootstrap/scss/bootstrap-reboot.scss' // Bootstrap Reboot collection
+@import 'node_modules/bootstrap/scss/bootstrap-grid.scss' // Optional Bootstrap Grid
+// @import 'node_modules/bootstrap/scss/mixins/_breakpoints.scss' // Bootstrap Breakpoints mixin
+// @import 'node_modules/bootstrap/scss/utilities/_sizing.scss' // Optional Bootstrap Utilites
+
+// FONTS LOAD SECTION
+
+@mixin font($fname, $fstyle, $fweight, $furl)
+	@font-face
+		font-family: $fname
+		font-style: $fstyle
+		font-weight: $fweight
+		font-display: swap
+		src: url($furl) format('woff2')
+
+@include font('Montserrat', normal, 400, '../fonts/montserrat-v15-latin_cyrillic-400.woff2')
+@include font('Montserrat', medium, 500, '../fonts/montserrat-v15-latin_cyrillic-500.woff2')
+@include font('Montserrat', semibold, 600, '../fonts/montserrat-v15-latin_cyrillic-600.woff2')
+@include font('Montserrat', extrabold, 800, '../fonts/montserrat-v15-latin_cyrillic-800.woff2')
+
+// GENERAL DOCUMENT STYLES
+
+::placeholder
+	color: #666
+
+::selection
+	background-color: $accent
+	color: $light
+
+*:focus
+	outline-offset: 5px
+	outline: 1px dashed rgba($dark, 0.4)
+
+input, textarea
+	outline: none
+	&:focus
+		outline: none
+	&:focus:required:invalid
+		border-color: red
+	&:required:valid
+		border-color: green
+
+html
+	overflow-x: hidden
+
+body
+	font-family: $userfont
+	font-size: $fontsize
+	line-height: $lineheight
+	color: $textcolor
+	min-width: 320px
+	position: relative
+	overflow-x: hidden
+	padding: 20px
+	background-color: $light
+	padding-bottom: 70px
+
+h1,h2,h3,h4,h5,h6
+	font-weight: 600
+	margin: 0
+
+h2
+	font-size: 1.3rem
+
+h3
+	font-size: 1.15rem
+
+a
+  color: inherit
+  transition: all 0.25s ease-out
+  &:hover
+    color: $accent
+    text-decoration: none
