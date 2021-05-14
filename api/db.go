@@ -18,7 +18,7 @@ type Teacher struct {
 	ID           interface{} `bson:"_id,omitempty"`
 	Name         string      `bson:"name"`
 	Phone        string      `bson:"phone"`
-	Subjects     []string    `bson:"subjects"`
+	Subjects     []string    `bson:"subjects,omitempty"`
 	PasswordHash string      `bson:"password_hash"`
 	Rating       float32     `bson:"rating,omitempty"`
 }
@@ -95,6 +95,26 @@ func getAllStudents() ([]Student, error) {
 	}
 
 	return students, nil
+}
+
+func addTeacher(t Teacher) (interface{}, error) {
+	collection := client.Database("testing").Collection("teachers")
+	res, err := collection.InsertOne(context.TODO(), t)
+	if err != nil {
+		return nil, fmt.Errorf("cannot insert data: %v", err)
+	}
+
+	return res.InsertedID, nil
+}
+
+func addStudent(s Student) (interface{}, error) {
+	collection := client.Database("testing").Collection("students")
+	res, err := collection.InsertOne(context.TODO(), s)
+	if err != nil {
+		return nil, fmt.Errorf("cannot insert data: %v", err)
+	}
+
+	return res.InsertedID, nil
 }
 
 func addTestTeacher() error {

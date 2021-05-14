@@ -9,6 +9,7 @@ services:
     build: .
     environment:
       DB_CONNECT_URL: mongodb://db:27017
+      JWT_KEY: F2YkkO9OezA5yO92Fn3xNBDNdlkgXgcvSGY4OxGQEvjlxEm765H71vJFk5LgYXH9
     depends_on:
       - db
 
