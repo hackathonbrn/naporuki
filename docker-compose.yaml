@@ -2,6 +2,8 @@ version: '3.9'
 services:
   db:
     image: mongo:4.4.6
+    volumes:
+      - ./.db:/data/db
 
   web:
     build: .
