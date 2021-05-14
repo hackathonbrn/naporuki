@@ -14,7 +14,7 @@ export default function Login(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    const apiUrl = "http://api:8080/register-teacher";
+    const apiUrl = "http://localhost:8080/api/v1/register-teacher";
     axios.post(apiUrl, {name: name, phone: phone, password: password}).then((resp) => {
         setLoading(false);
         if (resp.text === "success") { return (<Redirect to="/" />) }

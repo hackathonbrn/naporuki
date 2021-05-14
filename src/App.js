@@ -21,7 +21,7 @@ function App() {
       setAuth(false);
       return;
     };
-    const apiUrl = "http://api:8080/check-auth";
+    const apiUrl = "http://localhost:8080/api/v1/check-auth";
     axios.post(apiUrl).then((resp) => {
       if (resp.data === true) setAuth(true);
     });
