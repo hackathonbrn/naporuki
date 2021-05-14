@@ -1,0 +1,22 @@
+version: '3.9'
+services:
+  db:
+    image: mongo:4.4.6
+
+  web:
+    build: .
+    environment:
+      DB_CONNECT_URL: mongodb://db:27017
+    depends_on:
+      - db
+
+  nginx:
+    image: nginx:stable
+    volumes:
+      - ./nginx:/etc/nginx/templates
+    ports:
+      - '80:80'
+    environment:
+      - NGINX_PORT=80
+    depends_on:
+      - web
