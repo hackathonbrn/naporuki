@@ -10,6 +10,7 @@ import (
 )
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	teachers, err := getAllTeachers()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -30,6 +31,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func registerTeacherHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	name := strings.TrimSpace(r.FormValue("name"))
 	phone := strings.TrimSpace(r.FormValue("phone"))
 	password := strings.TrimSpace(r.FormValue("password"))
@@ -66,6 +68,8 @@ func registerTeacherHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func registerStudentHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	name := strings.TrimSpace(r.FormValue("name"))
 	phone := strings.TrimSpace(r.FormValue("phone"))
 	password := strings.TrimSpace(r.FormValue("password"))
@@ -121,6 +125,8 @@ func checkAuthHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func addTestTeacherHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	if err := addTestTeacher(); err != nil {
 		e := fmt.Sprintf("cannot add test teacher: %v", err)
 		http.Error(w, e, http.StatusInternalServerError)
@@ -129,6 +135,8 @@ func addTestTeacherHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func addTestStudentHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	if err := addTestStudent(); err != nil {
 		e := fmt.Sprintf("cannot add test student: %v", err)
 		http.Error(w, e, http.StatusInternalServerError)

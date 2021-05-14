@@ -4,4 +4,8 @@ server {
     location / {
         proxy_pass http://react:3000;
     }
+
+    location ^~ /api {
+        proxy_pass http://api:8080;
+    }
 }
