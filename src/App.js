@@ -1,6 +1,7 @@
 import Header from "./components/Header";
 import Main from "./components/Main";
 
+import Registration from "./components/Registration";
 import Login from "./components/Login";
 
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
@@ -14,19 +15,15 @@ axios.defaults.withCredentials = true;
 function App() {
   const [isAuth, setAuth] = useState(null);
 
-
-
   useEffect(() => {
     if (!document.cookie) {
       setAuth(false);
-    };
+    }
     const apiUrl = "http://localhost:8080/api/v1/check-auth";
     axios.get(apiUrl).then((resp) => {
-      console.log(resp);
-      if (resp.data === "true") setAuth(true);
+      if (resp.data === true) setAuth(true);
     });
   }, [setAuth]);
-
 
   return (
     <div>
@@ -77,8 +74,8 @@ function App() {
           <Route exact path="/">
             <Main isAuth={isAuth} />
           </Route>
-          <Route exact path="/login">
-            <Login isAuth={isAuth} />
+          <Route exact path="/register">
+            <Registration isAuth={isAuth} />
           </Route>
           <Route exact path="/achievements">
             <Achievements />
@@ -86,8 +83,10 @@ function App() {
           <Route exact path="/profile">
             <Profile />
           </Route>
+          <Route exact path="/login">
+            <Login isAuth={isAuth} />
+          </Route>
         </Switch>
-
       </Router>
     </div>
   );
