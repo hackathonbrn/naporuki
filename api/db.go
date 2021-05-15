@@ -86,6 +86,19 @@ func getUserByPhone(phone string) (*User, error) {
 	return &user, nil
 }
 
+func getUserProfileByPhone(phone string) (*Profile, error) {
+	var p Profile
+	collection := client.Database("testing").Collection("profiles")
+	err := collection.FindOne(context.TODO(), bson.D{{Key: "user.phone", Value: phone}}).Decode(&p)
+	if err == mongo.ErrNoDocuments {
+		return nil, fmt.Errorf("profile does not exist")
+	} else if err != nil {
+		return nil, fmt.Errorf("cannot execute find: %v", err)
+	}
+
+	return &p, nil
+}
+
 func addUser(u User) (interface{}, error) {
 	collection := client.Database("testing").Collection("users")
 	res, err := collection.InsertOne(context.TODO(), u)

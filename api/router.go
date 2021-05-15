@@ -30,6 +30,7 @@ func newRouter() *chi.Mux {
 		r.Post("/register", registerHandler)
 		r.Post("/login", loginHandler)
 		r.Post("/create-teacher-profile", createTeacherProfile)
+		r.Post("/get-teacher-profile", getTeacherProfile)
 
 		r.Get("/check-auth", checkAuthHandler)
 
@@ -170,6 +171,28 @@ func createTeacherProfile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Fprint(w, "success")
+}
+
+func getTeacherProfile(w http.ResponseWriter, r *http.Request) {
+	token, err := getJWTtokenFromCookies(r.Cookies())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	claims := token.Claims.(jwt.MapClaims)
+	phone := claims["phone"].(string)
+
+	p, err := getUserProfileByPhone(phone)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if err := json.NewEncoder(w).Encode(&p); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 func checkAuthHandler(w http.ResponseWriter, r *http.Request) {
