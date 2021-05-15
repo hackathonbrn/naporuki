@@ -30,8 +30,8 @@ func newRouter() *chi.Mux {
 		r.Post("/register", registerHandler)
 		r.Post("/login", loginHandler)
 		r.Post("/create-teacher-profile", createTeacherProfile)
-		r.Post("/get-teacher-profile", getTeacherProfile)
 
+		r.Get("/get-teacher-profile", getTeacherProfile)
 		r.Get("/get-all-profiles", getAllProfilesHandler)
 		r.Get("/check-auth", checkAuthHandler)
 
