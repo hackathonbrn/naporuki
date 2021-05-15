@@ -8,6 +8,8 @@ export default function Registration(props) {
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const [redirect, setRedirect] = useState(false);
+
 
   if (props.isAuth) return (<Redirect to="/" />);
 
@@ -19,10 +21,12 @@ export default function Registration(props) {
         setLoading(false);
         if (resp.data) {
             document.cookie = `jwt=${resp.data}`;
+            setRedirect(true);
         }
-        return (<Redirect to="/dashboard" />);
     });
   };
+
+  if (redirect) return (<Redirect to="/dashboard" />);
 
   return (
     <div className="login__wrapper">

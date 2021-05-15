@@ -9,6 +9,7 @@ export default function Login(props) {
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const [redirect, setRedirect] = useState(false);
 
     if (props.isAuth) return <Redirect to="/dashboard" />;
 
@@ -20,10 +21,12 @@ export default function Login(props) {
             setLoading(false);
             if (resp.data) {
                 document.cookie = `jwt=${resp.data}`;
-            }
-            return (<Redirect to="/dashboard" />);
+                setRedirect(true);
+            } 
         });
       };
+
+    if (redirect) return (<Redirect to="/dashboard" />);
 
     return (
         <div className="login__wrapper">
