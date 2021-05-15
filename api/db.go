@@ -15,21 +15,21 @@ import (
 
 // User struct
 type User struct {
-	ID           interface{} `bson:"_id,omitempty"`
-	Name         string      `bson:"name"`
-	Phone        string      `bson:"phone"`
-	PasswordHash string      `bson:"password_hash"`
-	Subjects     []string    `bson:"subjects,omitempty"`
-	Achievements []string    `bson:"achievements,omitempty"`
-	Grades       []float32   `bson:"grades,omitempty"`
-	Rating       float32     `bson:"rating,omitempty"`
+	ID           interface{} `bson:"_id,omitempty" json:"_id,omitempty"`
+	Name         string      `bson:"name" json:"name"`
+	Phone        string      `bson:"phone" json:"phone"`
+	PasswordHash string      `bson:"password_hash" json:"password_hash"`
+	Subjects     []string    `bson:"subjects,omitempty" json:"subjects,omitempty"`
+	Achievements []string    `bson:"achievements,omitempty" json:"achievements,omitempty"`
+	Grades       []float32   `bson:"grades,omitempty" json:"grades,omitempty"`
+	Rating       float32     `bson:"rating,omitempty" json:"rating,omitempty"`
 }
 
 // Profile struct
 type Profile struct {
-	ID   interface{} `bson:"_id,omitempty"`
-	User User        `bson:"user"`
-	Desc string      `bson:"desc"`
+	ID   interface{} `bson:"_id,omitempty" json:"_id,omitempty"`
+	User User        `bson:"user" json:"user"`
+	Desc string      `bson:"desc" json:"desc"`
 }
 
 var client = setDBConnection()
