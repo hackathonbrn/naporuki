@@ -1,12 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Categories from './Categories';
 import Search from './Search';
 import Popular from './Popular';
 
+import axios from 'axios';
+
 import { Redirect } from "react-router-dom";
 
 export default function Main(props) {
+
+  const [profiles, setProfiles] = useState([]);
+
+  useEffect(() => {
+    const apiUrl = "http://localhost:8080/api/v1/get-all-profiles";
+    axios.get(apiUrl).then((resp) => {
+      if (resp.data) {
+        setProfiles(resp.profiles);
+      };
+    });
+  }, [setProfiles]);
 
   if (!props.isAuth) return (<Redirect to="/login" />);
 
@@ -26,15 +39,9 @@ export default function Main(props) {
 
 
         <section className="popular">
-          <h2 className="popular__title">Популярное</h2>
+          <h2 className="popular__title">Пользователи</h2>
           <Popular 
-          items={
-            [
-              {name: 'Иван Степанов', rating: 4.9, photo: 'https://randomuser.me/api/portraits/men/43.jpg'},
-              {name: 'Геннадий Горин', rating: 5.0, photo: 'https://randomuser.me/api/portraits/men/32.jpg'},
-              {name: 'Лариса Долина', rating: 4.7, photo: 'https://randomuser.me/api/portraits/women/43.jpg'},
-            ]
-          }
+          items={profiles}
           />  
         </section>
       </main>
