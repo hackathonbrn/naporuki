@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strings"
-	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -28,8 +26,7 @@ func newRouter() *chi.Mux {
 	r.Route("/api/v1", func(r chi.Router) {
 		r.Get("/", indexHandler)
 
-		r.Post("/register-teacher", registerTeacherHandler)
-		r.Post("/register-student", registerStudentHandler)
+		r.Post("/register", registerHandler)
 
 		r.Get("/check-auth", checkAuthHandler)
 
@@ -41,46 +38,37 @@ func newRouter() *chi.Mux {
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
-	teachers, err := getAllTeachers()
+	users, err := getAllUsers()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	fmt.Fprintf(w, "%+v\n", teachers)
-
-	students, err := getAllStudents()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	fmt.Fprintf(w, "%+v\n", students)
-
+	fmt.Fprintf(w, "%+v\n", users)
 	fmt.Fprint(w, "done\n")
 }
 
-func registerTeacherHandler(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
+func registerHandler(w http.ResponseWriter, r *http.Request) {
 	var J struct {
 		Name     string `json:"name"`
 		Phone    string `json:"phone"`
 		Password string `json:"password"`
 	}
 
+	defer r.Body.Close()
 	err := json.NewDecoder(r.Body).Decode(&J)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	t := Teacher{
+	u := User{
 		Name:         J.Name,
 		Phone:        J.Phone,
 		PasswordHash: hashPassword(J.Password),
 	}
 
-	id, err := addTeacher(t)
+	id, err := addUser(u)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -91,54 +79,8 @@ func registerTeacherHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
-	// c := http.Cookie{
-	// 	Name:     "jwt",
-	// 	Value:    token,
-	// 	HttpOnly: false,
-	// 	Secure:   false,
-	// 	Expires:  time.Now().AddDate(0, 1, 0),
-	// 	SameSite: 3,
-	// }
-	// http.SetCookie(w, &c)
 
 	fmt.Fprint(w, token)
-}
-
-func registerStudentHandler(w http.ResponseWriter, r *http.Request) {
-	name := strings.TrimSpace(r.FormValue("name"))
-	phone := strings.TrimSpace(r.FormValue("phone"))
-	password := strings.TrimSpace(r.FormValue("password"))
-
-	s := Student{
-		Name:         name,
-		Phone:        phone,
-		PasswordHash: hashPassword(password),
-	}
-
-	id, err := addStudent(s)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	token, err := createJWTtoken(id)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	c := http.Cookie{
-		Name:     "jwt",
-		Value:    token,
-		HttpOnly: false,
-		Secure:   false,
-		Expires:  time.Now().AddDate(0, 1, 0),
-		SameSite: 3,
-	}
-	http.SetCookie(w, &c)
-
-	fmt.Fprint(w, "success")
 }
 
 func hashPassword(password string) string {
