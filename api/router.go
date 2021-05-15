@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
@@ -28,6 +29,7 @@ func newRouter() *chi.Mux {
 
 		r.Post("/register", registerHandler)
 		r.Post("/login", loginHandler)
+		r.Post("/create-teacher-profile", createTeacherProfile)
 
 		r.Get("/check-auth", checkAuthHandler)
 
@@ -69,13 +71,13 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 		PasswordHash: hashPassword(J.Password),
 	}
 
-	id, err := addUser(u)
+	_, err = addUser(u)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	token, err := createJWTtoken(id)
+	token, err := createJWTtoken(u.Phone)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -108,7 +110,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, err := createJWTtoken(user.ID)
+	token, err := createJWTtoken(user.Phone)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -125,6 +127,49 @@ func hashPassword(password string) string {
 func checkPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
+}
+
+func createTeacherProfile(w http.ResponseWriter, r *http.Request) {
+	var J struct {
+		Subjects []string `json:"subjects"`
+		Desc     string   `json:"desc"`
+	}
+
+	defer r.Body.Close()
+	err := json.NewDecoder(r.Body).Decode(&J)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	token, err := getJWTtokenFromCookies(r.Cookies())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	claims := token.Claims.(jwt.MapClaims)
+	phone := claims["phone"].(string)
+
+	user, err := getUserByPhone(phone)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// Не забыть обновить в базе это поле
+	user.Subjects = J.Subjects
+
+	p := Profile{
+		User: *user,
+		Desc: J.Desc,
+	}
+
+	if err := addProfile(p); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	fmt.Fprint(w, "success")
 }
 
 func checkAuthHandler(w http.ResponseWriter, r *http.Request) {

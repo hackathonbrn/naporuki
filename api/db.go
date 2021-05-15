@@ -25,6 +25,13 @@ type User struct {
 	Rating       float32     `bson:"rating,omitempty"`
 }
 
+// Profile struct
+type Profile struct {
+	ID   interface{} `bson:"_id,omitempty"`
+	User User        `bson:"user"`
+	Desc string      `bson:"desc"`
+}
+
 var client = setDBConnection()
 
 func setDBConnection() *mongo.Client {
@@ -87,6 +94,16 @@ func addUser(u User) (interface{}, error) {
 	}
 
 	return res.InsertedID, nil
+}
+
+func addProfile(p Profile) error {
+	collection := client.Database("testing").Collection("profiles")
+	_, err := collection.InsertOne(context.TODO(), p)
+	if err != nil {
+		return fmt.Errorf("cannot insert data: %v", err)
+	}
+
+	return nil
 }
 
 func addTestTeacher() error {

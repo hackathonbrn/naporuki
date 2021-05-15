@@ -9,10 +9,10 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-func createJWTtoken(id interface{}) (string, error) {
+func createJWTtoken(phone string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS512, jwt.MapClaims{
-		"id":  id,
-		"exp": time.Now().AddDate(0, 1, 0).Unix(),
+		"phone": phone,
+		"exp":   time.Now().AddDate(0, 1, 0).Unix(),
 	})
 
 	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_KEY")))
