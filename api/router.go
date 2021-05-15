@@ -27,6 +27,7 @@ func newRouter() *chi.Mux {
 		r.Get("/", indexHandler)
 
 		r.Post("/register", registerHandler)
+		r.Post("/login", loginHandler)
 
 		r.Get("/check-auth", checkAuthHandler)
 
@@ -75,6 +76,39 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	token, err := createJWTtoken(id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	fmt.Fprint(w, token)
+}
+
+func loginHandler(w http.ResponseWriter, r *http.Request) {
+	var J struct {
+		Phone    string `json:"phone"`
+		Password string `json:"password"`
+	}
+
+	defer r.Body.Close()
+	err := json.NewDecoder(r.Body).Decode(&J)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	user, err := getUserByPhone(J.Phone)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if !checkPasswordHash(J.Password, user.PasswordHash) {
+		http.Error(w, "passwords mismatch", http.StatusInternalServerError)
+		return
+	}
+
+	token, err := createJWTtoken(user.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

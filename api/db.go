@@ -66,6 +66,19 @@ func getAllUsers() ([]User, error) {
 	return users, nil
 }
 
+func getUserByPhone(phone string) (*User, error) {
+	var user User
+	collection := client.Database("testing").Collection("users")
+	err := collection.FindOne(context.TODO(), bson.D{{Key: "phone", Value: phone}}).Decode(&user)
+	if err == mongo.ErrNoDocuments {
+		return nil, fmt.Errorf("user does not exist")
+	} else if err != nil {
+		return nil, fmt.Errorf("cannot execute find: %v", err)
+	}
+
+	return &user, nil
+}
+
 func addUser(u User) (interface{}, error) {
 	collection := client.Database("testing").Collection("users")
 	res, err := collection.InsertOne(context.TODO(), u)
