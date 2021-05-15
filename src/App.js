@@ -1,8 +1,10 @@
 import Header from "./components/Header";
-import Main from "./components/Main";
 
+import Main from "./components/Main";
+import Profile from "./components/Profile";
 import Registration from "./components/Registration";
 import Login from "./components/Login";
+import ProfileTeacherForm from "./components/ProfileTeacherForm";
 
 import {BrowserRouter as Router, Switch, Route, NavLink, Redirect } from "react-router-dom";
 
@@ -13,7 +15,7 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 
 function App() {
-  const [isAuth, setAuth] = useState(true);
+  const [isAuth, setAuth] = useState(false);
 
   useEffect(() => {
     if (!document.cookie) {
@@ -83,10 +85,13 @@ function App() {
             <Achievements />
           </Route>
           <Route exact path="/profile">
-            <Profile />
+            <Profile isAuth={isAuth}/>
           </Route>
           <Route exact path="/login">
             <Login isAuth={isAuth} />
+          </Route>
+          <Route exact path="/teacher-form">
+            <ProfileTeacherForm isAuth={isAuth} />
           </Route>
         </Switch>
       </Router>
@@ -94,10 +99,6 @@ function App() {
   );
   function Achievements() {
     return <h2>Достижения</h2>;
-  }
-
-  function Profile() {
-    return <h2>Профиль</h2>;
   }
 }
 
