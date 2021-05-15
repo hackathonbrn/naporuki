@@ -73,6 +73,29 @@ func getAllUsers() ([]User, error) {
 	return users, nil
 }
 
+func getAllProfiles() ([]Profile, error) {
+	collection := client.Database("testing").Collection("profiles")
+	cur, err := collection.Find(context.TODO(), bson.D{})
+	if err != nil {
+		return nil, fmt.Errorf("cannot execute find: %v", err)
+	}
+	defer cur.Close(context.TODO())
+	profiles := make([]Profile, 0)
+	for cur.Next(context.TODO()) {
+		var p Profile
+		err := cur.Decode(&p)
+		if err != nil {
+			return nil, fmt.Errorf("cannot decode result: %v", err)
+		}
+		profiles = append(profiles, p)
+	}
+	if err := cur.Err(); err != nil {
+		return nil, fmt.Errorf("something happened: %v", err)
+	}
+
+	return profiles, nil
+}
+
 func getUserByPhone(phone string) (*User, error) {
 	var user User
 	collection := client.Database("testing").Collection("users")
