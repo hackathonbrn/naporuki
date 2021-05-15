@@ -7,7 +7,12 @@ import axios from 'axios';
 export default function Profile(props) {
 
     const [description, setDescription] = useState('');
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState({
+        name: '',
+        rating: 0.0,
+        phone: '',
+        subjects: []
+    });
 
     useEffect(() => {
         const apiUrl = "http://localhost:8080/api/v1/get-teacher-profile";

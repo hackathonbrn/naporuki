@@ -19,8 +19,8 @@ export default function Registration(props) {
         setLoading(false);
         if (resp.data) {
             document.cookie = `jwt=${resp.data}`;
-            return (<Redirect to="/dashboard" />)
         }
+        return (<Redirect to="/dashboard" />);
     });
   };
 

@@ -20,8 +20,8 @@ export default function Login(props) {
             setLoading(false);
             if (resp.data) {
                 document.cookie = `jwt=${resp.data}`;
-                return (<Redirect to="/dashboard" />);
             }
+            return (<Redirect to="/dashboard" />);
         });
       };
 
