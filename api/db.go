@@ -13,24 +13,16 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
-// Teacher struct
-type Teacher struct {
+// User struct
+type User struct {
 	ID           interface{} `bson:"_id,omitempty"`
 	Name         string      `bson:"name"`
 	Phone        string      `bson:"phone"`
+	PasswordHash string      `bson:"password_hash"`
 	Subjects     []string    `bson:"subjects,omitempty"`
-	PasswordHash string      `bson:"password_hash"`
-	Rating       float32     `bson:"rating,omitempty"`
-}
-
-// Student struct
-type Student struct {
-	ID           interface{} `bson:"_id,omitempty"`
-	Name         string      `bson:"name"`
-	Phone        string      `bson:"phone"`
 	Achievements []string    `bson:"achievements,omitempty"`
-	PasswordHash string      `bson:"password_hash"`
 	Grades       []float32   `bson:"grades,omitempty"`
+	Rating       float32     `bson:"rating,omitempty"`
 }
 
 var client = setDBConnection()
@@ -51,65 +43,32 @@ func setDBConnection() *mongo.Client {
 	return client
 }
 
-func getAllTeachers() ([]Teacher, error) {
-	collection := client.Database("testing").Collection("teachers")
+func getAllUsers() ([]User, error) {
+	collection := client.Database("testing").Collection("users")
 	cur, err := collection.Find(context.TODO(), bson.D{})
 	if err != nil {
 		return nil, fmt.Errorf("cannot execute find: %v", err)
 	}
 	defer cur.Close(context.TODO())
-	teachers := make([]Teacher, 0)
+	users := make([]User, 0)
 	for cur.Next(context.TODO()) {
-		var t Teacher
-		err := cur.Decode(&t)
+		var u User
+		err := cur.Decode(&u)
 		if err != nil {
 			return nil, fmt.Errorf("cannot decode result: %v", err)
 		}
-		teachers = append(teachers, t)
+		users = append(users, u)
 	}
 	if err := cur.Err(); err != nil {
 		return nil, fmt.Errorf("something happened: %v", err)
 	}
 
-	return teachers, nil
+	return users, nil
 }
 
-func getAllStudents() ([]Student, error) {
-	collection := client.Database("testing").Collection("students")
-	cur, err := collection.Find(context.TODO(), bson.D{})
-	if err != nil {
-		return nil, fmt.Errorf("cannot execute find: %v", err)
-	}
-	defer cur.Close(context.TODO())
-	students := make([]Student, 0)
-	for cur.Next(context.TODO()) {
-		var s Student
-		err := cur.Decode(&s)
-		if err != nil {
-			return nil, fmt.Errorf("cannot decode result: %v", err)
-		}
-		students = append(students, s)
-	}
-	if err := cur.Err(); err != nil {
-		return nil, fmt.Errorf("something happened: %v", err)
-	}
-
-	return students, nil
-}
-
-func addTeacher(t Teacher) (interface{}, error) {
-	collection := client.Database("testing").Collection("teachers")
-	res, err := collection.InsertOne(context.TODO(), t)
-	if err != nil {
-		return nil, fmt.Errorf("cannot insert data: %v", err)
-	}
-
-	return res.InsertedID, nil
-}
-
-func addStudent(s Student) (interface{}, error) {
-	collection := client.Database("testing").Collection("students")
-	res, err := collection.InsertOne(context.TODO(), s)
+func addUser(u User) (interface{}, error) {
+	collection := client.Database("testing").Collection("users")
+	res, err := collection.InsertOne(context.TODO(), u)
 	if err != nil {
 		return nil, fmt.Errorf("cannot insert data: %v", err)
 	}
@@ -118,7 +77,7 @@ func addStudent(s Student) (interface{}, error) {
 }
 
 func addTestTeacher() error {
-	t := Teacher{
+	t := User{
 		Name:         "teacher",
 		Phone:        "89029995361",
 		Subjects:     []string{"Алгебра", "Информатика"},
@@ -126,7 +85,7 @@ func addTestTeacher() error {
 		Rating:       4.9,
 	}
 
-	collection := client.Database("testing").Collection("teachers")
+	collection := client.Database("testing").Collection("users")
 	_, err := collection.InsertOne(context.TODO(), t)
 	if err != nil {
 		return fmt.Errorf("cannot insert data: %v", err)
@@ -136,7 +95,7 @@ func addTestTeacher() error {
 }
 
 func addTestStudent() error {
-	s := Student{
+	s := User{
 		Name:         "student",
 		Phone:        "89005001111",
 		PasswordHash: "some hash",
@@ -144,7 +103,7 @@ func addTestStudent() error {
 		Achievements: []string{"the first one", "cool guy"},
 	}
 
-	collection := client.Database("testing").Collection("students")
+	collection := client.Database("testing").Collection("users")
 	_, err := collection.InsertOne(context.TODO(), s)
 	if err != nil {
 		return fmt.Errorf("cannot insert data: %v", err)

@@ -1,14 +1,14 @@
-import Header from "./components/Header";
-import Main from "./components/Main";
+import Header from './components/Header';
+import Main from './components/Main';
 
 import Registration from "./components/Registration";
 import Login from "./components/Login";
 
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
-import axios from "axios";
+import axios from 'axios';
 
 axios.defaults.withCredentials = true;
 
@@ -32,13 +32,7 @@ function App() {
       <Router>
         <footer className="footer">
           <Link to="/" className="footer__button button">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 0 24 24"
-              width="24px"
-              fill="#000000"
-            >
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
               <path d="M0 0h24v24H0z" fill="none" />
               <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
             </svg>
@@ -57,13 +51,7 @@ function App() {
             </svg>
           </Link>
           <Link to="/profile" className="footer__button button">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 0 24 24"
-              width="24px"
-              fill="#000000"
-            >
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
               <path d="M0 0h24v24H0z" fill="none" />
               <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
             </svg>
