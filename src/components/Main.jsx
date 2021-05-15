@@ -8,6 +8,7 @@ import { Redirect } from "react-router-dom";
 
 export default function Main(props) {
 
+
   if (!props.isAuth) return (<Redirect to="/login" />);
 
 

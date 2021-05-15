@@ -19,11 +19,11 @@ function App() {
   useEffect(() => {
     if (!document.cookie) {
       setAuth(false);
-      return;
     };
     const apiUrl = "http://localhost:8080/api/v1/check-auth";
-    axios.post(apiUrl).then((resp) => {
-      if (resp.data === true) setAuth(true);
+    axios.get(apiUrl).then((resp) => {
+      console.log(resp);
+      if (resp.data === "true") setAuth(true);
     });
   }, [setAuth]);
 

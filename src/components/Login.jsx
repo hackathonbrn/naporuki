@@ -17,7 +17,11 @@ export default function Login(props) {
     const apiUrl = "http://localhost:8080/api/v1/register-teacher";
     axios.post(apiUrl, {name: name, phone: phone, password: password}).then((resp) => {
         setLoading(false);
-        if (resp.text === "success") { return (<Redirect to="/" />) }
+        if (resp.data) {
+            // console.log(resp.data);
+            document.cookie = `jwt=${resp.data}`;
+            return (<Redirect to="/" />) 
+        }
     });
   };
 
@@ -25,10 +29,13 @@ export default function Login(props) {
     <div className="login__wrapper">
       <h2 className="login__header">Регистрация</h2>
       <form className="login__form" onSubmit={handleSubmit}>
-        <input className="login__input" disabled={loading} type="text" placeholder="Ваше имя" value={name} onChange={(e) => setName(e.target.value)} name="name" />
-        <input className="login__input" disabled={loading} type="tel" placeholder="Номер телефона" value={phone} onChange={(e) => setPhone(e.target.value)} name="phone" />
-        <input className="login__input" disabled={loading} type="password" placeholder="Пароль" value={password} onChange={(e) => setPassword(e.target.value)} name="password" />
-        <input className="login__submit" disabled={loading} type="submit" value="Отправить" />
+        <label className="login__label" htmlFor="name">Имя</label>
+        <input required className="login__input" disabled={loading} type="text" placeholder="Введите имя" value={name} onChange={(e) => setName(e.target.value)} name="name" id="name" />
+        <label className="login__label" htmlFor="phone">Номер телефона</label>
+        <input required className="login__input" disabled={loading} type="tel" placeholder="+7" value={phone} onChange={(e) => setPhone(e.target.value)} name="phone" id="phone" />
+        <label className="login__label" htmlFor="password">Пароль</label>
+        <input required className="login__input" disabled={loading} type="password" placeholder="Введите пароль" value={password} onChange={(e) => setPassword(e.target.value)} name="password" id="password" />
+        <input className="login__submit" disabled={loading} type="submit" value="Сохранить" />
       </form>
     </div>
   );
