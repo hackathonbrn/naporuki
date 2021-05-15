@@ -8,12 +8,10 @@ import { Redirect } from "react-router-dom";
 
 export default function Main(props) {
 
-
-  if (!props.isAuth) return (<Redirect to="/register" />);
+  if (!props.isAuth) return (<Redirect to="/login" />);
 
 
     return (
-    <div>
         <main className="main">
 
         <h2 style={{marginBottom: "30px"}}>Объявления</h2>
@@ -40,7 +38,5 @@ export default function Main(props) {
           />  
         </section>
       </main>
-
-      </div>
     )
 }

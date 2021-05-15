@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Redirect, Link } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 
 import axios from 'axios';
 
@@ -10,7 +10,7 @@ export default function Login(props) {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
 
-    if (props.isAuth) return <Redirect to="/" />;
+    if (props.isAuth) return <Redirect to="/dashboard" />;
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -20,7 +20,7 @@ export default function Login(props) {
             setLoading(false);
             if (resp.data) {
                 document.cookie = `jwt=${resp.data}`;
-                return (<Redirect to="/" />) 
+                return (<Redirect to="/dashboard" />);
             }
         });
       };
