@@ -1,31 +1,37 @@
-import Header from "./components/Header";
+import Header from './components/Header';
 
-import Main from "./components/Main";
-import Profile from "./components/Profile";
-import Registration from "./components/Registration";
-import Login from "./components/Login";
-import ProfileTeacherForm from "./components/ProfileTeacherForm";
+import Main from './components/Main';
+import Profile from './components/Profile';
+import Registration from './components/Registration';
+import Login from './components/Login';
+import ProfileTeacherForm from './components/ProfileTeacherForm';
 
-import {BrowserRouter as Router, Switch, Route, NavLink, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, NavLink, Redirect } from 'react-router-dom';
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
-import axios from "axios";
+import axios from 'axios';
 
 axios.defaults.withCredentials = true;
 
 function App() {
-  const [isAuth, setAuth] = useState(false);
+  const [isAuth, setAuth] = useState(null);
 
-  useEffect(() => {
+  function checkAuth() {
     if (!document.cookie) {
       setAuth(false);
     }
-    const apiUrl = "http://localhost:8080/api/v1/check-auth";
+    const apiUrl = 'http://localhost:8080/api/v1/check-auth';
     axios.get(apiUrl).then((resp) => {
-      if (resp.data === true) setAuth(true);
+      if (resp.data === true) {
+        setAuth(true);
+      }
     });
-  }, [setAuth]);
+  }
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
 
   return (
     <div>
@@ -34,13 +40,7 @@ function App() {
       <Router>
         <nav className="footer">
           <NavLink activeClassName="nav-item__active" to="/dashboard" className="nav-item">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 0 24 24"
-              width="24px"
-              fill="#000000"
-            >
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
               <path d="M0 0h24v24H0z" fill="none" />
               <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
             </svg>
@@ -59,13 +59,7 @@ function App() {
             </svg>
           </NavLink>
           <NavLink activeClassName="nav-item__active" to="/profile" className="nav-item">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 0 24 24"
-              width="24px"
-              fill="#000000"
-            >
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
               <path d="M0 0h24v24H0z" fill="none" />
               <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
             </svg>
@@ -73,8 +67,8 @@ function App() {
         </nav>
 
         <Switch>
-          {/* <Redirect exact from="/" to="/dashboard" /> */}
-          
+          <Redirect exact from="/" to="/dashboard" />
+
           <Route exact path="/dashboard">
             <Main isAuth={isAuth} />
           </Route>
@@ -85,7 +79,7 @@ function App() {
             <Achievements />
           </Route>
           <Route exact path="/profile">
-            <Profile isAuth={isAuth}/>
+            <Profile isAuth={isAuth} />
           </Route>
           <Route exact path="/login">
             <Login isAuth={isAuth} />

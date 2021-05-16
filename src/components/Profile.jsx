@@ -21,8 +21,10 @@ export default function Profile(props) {
               setDescription(resp.desc);
               setUser(resp.user);
           };
+        }).catch(error => {
+            console.log(error);
         });
-      }, [setUser]);
+      }, []);
 
     if (!props.isAuth) return (<Redirect to="/login" />);
 

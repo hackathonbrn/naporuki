@@ -19,7 +19,7 @@ export default function Main(props) {
         setProfiles([]);
       };
     });
-  }, [setProfiles]);
+  }, []);
 
   if (!props.isAuth) return (<Redirect to="/login" />);
 
@@ -35,8 +35,6 @@ export default function Main(props) {
           <h2 className="categories__title">Дисциплины</h2>
           <Categories items={['Математика', 'Физика', 'Биология', 'Русский язык', 'Химия', 'Информатика', 'Английский язык']}/>
         </section>
-
-
 
         <section className="popular">
           <h2 className="popular__title">Пользователи</h2>
