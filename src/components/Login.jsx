@@ -16,9 +16,11 @@ class Login extends React.Component {
     };
   }
 
-  signup() {
+  handleLogin = (e) => {
+    e.preventDefault();
+    this.setState({ stateloading: true });
     const apiUrl = "http://localhost:8080/api/v1/login";
-    return axios
+    axios
       .post(apiUrl, { phone: this.state.phone, password: this.state.password })
       .then((resp) => {
         this.setState({ loading: false });
@@ -27,18 +29,10 @@ class Login extends React.Component {
           this.props.history.push("/dashboard");
         }
       });
-  }
-
-  handleLogin = (e) => {
-    e.preventDefault();
-    this.setState({ stateloading: true });
-    this.signup();
     this.setState({ stateloading: false });
   };
 
   render() {
-    if (this.state.isSignedUp) return <Redirect to="/dashboard" />;
-    if (this.props.isAuth) return <Redirect to="/dashboard" />;
 
     return (
       <div className="login__wrapper">
