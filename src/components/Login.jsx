@@ -25,6 +25,7 @@ class Login extends React.Component {
       .then((resp) => {
         this.setState({ loading: false });
         if (resp.data) {
+          console.log(resp.data);
           login(resp.data);
           this.props.history.push("/dashboard");
         }

@@ -130,6 +130,14 @@ func addUser(u User) (primitive.ObjectID, error) {
 		return primitive.ObjectID{}, fmt.Errorf("cannot insert data: %v", err)
 	}
 
+	p := Profile{
+		User: u,
+	}
+
+	if err := addProfile(p); err != nil {
+		return primitive.ObjectID{}, fmt.Errorf("cannot insert data: %v", err)
+	}
+
 	return res.InsertedID.(primitive.ObjectID), nil
 }
 

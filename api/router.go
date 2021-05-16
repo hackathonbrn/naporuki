@@ -33,7 +33,7 @@ func newRouter() *chi.Mux {
 		r.Post("/login", loginHandler)
 		r.Post("/create-teacher-profile", createTeacherProfile)
 
-		r.Get("/get-teacher-profile", getTeacherProfile)
+		r.Get("/get-teacher-profile", getProfile)
 		r.Get("/get-all-profiles", getAllProfilesHandler)
 		r.Get("/check-auth", checkAuthHandler)
 
@@ -196,7 +196,7 @@ func getAllProfilesHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func getTeacherProfile(w http.ResponseWriter, r *http.Request) {
+func getProfile(w http.ResponseWriter, r *http.Request) {
 	token, err := getJWTtokenFromCookies(r.Cookies())
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

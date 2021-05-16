@@ -19,7 +19,6 @@ export default function Profile(props) {
       .get(apiUrl)
       .then((resp) => {
         if (resp.data) {
-          console.log(resp);
           setDescription(resp.data.desc);
           setUser(resp.data.user);
         }
@@ -52,9 +51,7 @@ export default function Profile(props) {
 
         <h3 className="profile__subheader">О себе</h3>
         <p className="profile__description">
-          {description} Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Impedit delectus sunt ex quo at consectetur, beatae doloremque minus
-          laudantium fugit.
+          {description}
         </p>
         <div className="profile__teacher-wrapper">
         <Link className="profile__teacher" to="/teacher-form">
