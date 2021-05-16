@@ -1,5 +1,6 @@
-import Header from './components/Header';
+import React, { useState, useEffect } from 'react';
 
+import Header from './components/Header';
 import Main from './components/Main';
 import Profile from './components/Profile';
 import Registration from './components/Registration';
@@ -8,14 +9,15 @@ import ProfileTeacherForm from './components/ProfileTeacherForm';
 
 import { BrowserRouter as Router, Switch, Route, NavLink, Redirect } from 'react-router-dom';
 
-import React, { useState, useEffect } from 'react';
+import {isLogin} from './utils'
+
 
 import axios from 'axios';
 
 axios.defaults.withCredentials = true;
 
 function App() {
-  const [isAuth, setAuth] = useState(null);
+  const [isAuth, setAuth] = useState(false);
 
   function checkAuth() {
     if (!document.cookie) {
@@ -34,14 +36,14 @@ function App() {
   }, []);
 
   const PrivateRoute = ({ component: Component, ...rest }) => {
-    return <Route {...rest} render={(props) => (isAuth ? <Component {...props} /> : <Redirect to="/login" />)} />;
+    return <Route {...rest} render={(props) => (isLogin() ? <Component {...props} /> : <Redirect to="/login" />)} />;
   };
 
   const PublicRoute = ({ component: Component, restricted, ...rest }) => {
     return (
       <Route
         {...rest}
-        render={(props) => (isAuth && restricted ? <Redirect to="/dashboard" /> : <Component {...props} />)}
+        render={(props) => (isLogin() && restricted ? <Redirect to="/dashboard" /> : <Component {...props} />)}
       />
     );
   };
@@ -50,8 +52,7 @@ function App() {
     <div>
       <Header />
 
-      <Router>
-        <nav className="footer">
+      <nav className="footer">
           <NavLink activeClassName="nav-item__active" to="/dashboard" className="nav-item">
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
               <path d="M0 0h24v24H0z" fill="none" />
@@ -79,43 +80,16 @@ function App() {
           </NavLink>
         </nav>
 
+      <Router>
         <Switch>
           <Redirect exact from="/" to="/dashboard" />
 
-          {/* <Route exact path="/dashboard">
-            <Main isAuth={isAuth} />
-          </Route> */}
-
-          <PrivateRoute component={Main} path="/dashboard" exact />
-
-          {/* <Route exact path="/register">
-            <Registration isAuth={isAuth} />
-          </Route> */}
-
           <PublicRoute restricted={false} component={Registration} path="/register" exact />
-
-          {/* <Route exact path="/achievements">
-            <Achievements />
-          </Route> */}
-
-          <PrivateRoute component={Achievements} path="/achievements" exact />
-
-          {/* <Route exact path="/profile">
-            <Profile isAuth={isAuth} />
-          </Route> */}
-
-          <PrivateRoute component={Profile} path="/profile" exact />
-
-          {/* <Route exact path="/login">
-            <Login isAuth={isAuth} />
-          </Route> */}
-
           <PublicRoute restricted={false} component={Login} path="/login" exact />
 
-          {/* <Route exact path="/teacher-form">
-            <ProfileTeacherForm isAuth={isAuth} />
-          </Route> */}
-
+          <PrivateRoute component={Achievements} path="/achievements" exact />
+          <PrivateRoute component={Main} path="/dashboard" exact />
+          <PrivateRoute component={Profile} path="/profile" exact />
           <PrivateRoute component={ProfileTeacherForm} path="/teacher-form" exact />
         </Switch>
       </Router>
