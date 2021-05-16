@@ -15,7 +15,6 @@ import axios from 'axios';
 axios.defaults.withCredentials = true;
 
 function App() {
-
   const [isAuth, setAuth] = useState(null);
 
   function checkAuth() {
@@ -28,31 +27,22 @@ function App() {
         setAuth(true);
       }
     });
-  };
+  }
 
-  // useEffect(() => {
+  useEffect(() => {
     checkAuth();
-  // }, []);
+  }, []);
 
-
-
-  const PrivateRoute = ({component: Component, ...rest}) => {
-    return (
-        <Route {...rest} render={props => (
-          isAuth ?
-                <Component {...props} />
-            : <Redirect to="/login" />
-        )} />
-    );
+  const PrivateRoute = ({ component: Component, ...rest }) => {
+    return <Route {...rest} render={(props) => (isAuth ? <Component {...props} /> : <Redirect to="/login" />)} />;
   };
 
-  const PublicRoute = ({component: Component, restricted, ...rest}) => {
+  const PublicRoute = ({ component: Component, restricted, ...rest }) => {
     return (
-        <Route {...rest} render={props => (
-          isAuth && restricted ?
-                <Redirect to="/dashboard" />
-            : <Component {...props} />
-        )} />
+      <Route
+        {...rest}
+        render={(props) => (isAuth && restricted ? <Redirect to="/dashboard" /> : <Component {...props} />)}
+      />
     );
   };
 
@@ -109,7 +99,6 @@ function App() {
           </Route> */}
 
           <PrivateRoute component={Achievements} path="/achievements" exact />
-          
 
           {/* <Route exact path="/profile">
             <Profile isAuth={isAuth} />
@@ -123,15 +112,11 @@ function App() {
 
           <PublicRoute restricted={false} component={Login} path="/login" exact />
 
-
-          
           {/* <Route exact path="/teacher-form">
             <ProfileTeacherForm isAuth={isAuth} />
           </Route> */}
 
           <PrivateRoute component={ProfileTeacherForm} path="/teacher-form" exact />
-
-
         </Switch>
       </Router>
     </div>
