@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 
+import { login } from '../utils'
+
 export default function Registration(props) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -19,7 +21,7 @@ export default function Registration(props) {
       .then((resp) => {
         setLoading(false);
         if (resp.data) {
-          document.cookie = `jwt=${resp.data}`;
+          login(resp.data);
           history.push("/dashboard");
         }
       });

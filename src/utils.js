@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const TOKEN_KEY = 'jwt';
 
 export const login = (jwt) => {
@@ -10,8 +12,12 @@ export const logout = () => {
 
 export const isLogin = () => {
     if (localStorage.getItem(TOKEN_KEY)) {
-        return true;
+        const apiUrl = "http://localhost:8080/api/v1/check-auth";
+        axios.get(apiUrl).then((resp) => {
+          if (resp.data === true) {
+            return true;
+            }
+        });
     }
-
     return false;
 }

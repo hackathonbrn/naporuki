@@ -14,7 +14,7 @@ export default function ProfileTeacherForm(props) {
         e.preventDefault();
         setLoading(!loading);
         const apiUrl = "http://localhost:8080/api/v1/create-teacher-profile";
-        axios.post(apiUrl, {desc: description, subjects: subject}).then((resp) => {
+        axios.post(apiUrl, {desc: description, subjects: [subject]}).then((resp) => {
             setLoading(!loading);
             if (resp.data === "success") {
                 return (<Redirect to="/profile" />);
