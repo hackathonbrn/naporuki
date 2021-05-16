@@ -13,6 +13,7 @@ export const logout = () => {
 
 export const isLogin = () => {
   if (localStorage.getItem(TOKEN_KEY)) {
+    document.cookie = `${TOKEN_KEY}=${localStorage.getItem(TOKEN_KEY)}`;
     const apiUrl = 'http://localhost:8080/api/v1/check-auth';
     axios.get(apiUrl).then((resp) => {
       if (resp.data === true) {
