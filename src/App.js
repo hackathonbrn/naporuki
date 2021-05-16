@@ -28,12 +28,13 @@ function App() {
         setAuth(true);
       }
     });
+    return isAuth;
   };
 
   const PrivateRoute = ({component: Component, ...rest}) => {
     return (
         <Route {...rest} render={props => (
-            isAuth ?
+          checkAuth() ?
                 <Component {...props} />
             : <Redirect to="/login" />
         )} />
@@ -43,7 +44,7 @@ function App() {
   const PublicRoute = ({component: Component, restricted, ...rest}) => {
     return (
         <Route {...rest} render={props => (
-          isAuth && restricted ?
+          checkAuth() && restricted ?
                 <Redirect to="/dashboard" />
             : <Component {...props} />
         )} />
