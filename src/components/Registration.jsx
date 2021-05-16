@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Redirect, Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 // import axios from 'axios';
 
 export default function Registration(props) {
@@ -8,10 +8,8 @@ export default function Registration(props) {
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const [redirect, setRedirect] = useState(false);
 
-
-  if (props.isAuth) return (<Redirect to="/" />);
+    let history = useHistory();
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -21,12 +19,10 @@ export default function Registration(props) {
         setLoading(false);
         if (resp.data) {
             document.cookie = `jwt=${resp.data}`;
-            setRedirect(true);
+            history.push("/dashboard");
         }
     });
   };
-
-  if (redirect) return (<Redirect to="/dashboard" />);
 
   return (
     <div className="login__wrapper">

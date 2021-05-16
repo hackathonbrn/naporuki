@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Categories from './Categories';
 
 import axios from 'axios';
@@ -9,7 +9,7 @@ export default function Profile(props) {
     const [description, setDescription] = useState('');
     const [user, setUser] = useState({
         name: '',
-        rating: 0.0,
+        rating: 0,
         phone: '',
         subjects: []
     });
@@ -25,8 +25,6 @@ export default function Profile(props) {
             console.log(error);
         });
       }, []);
-
-    if (!props.isAuth) return (<Redirect to="/login" />);
 
     return (
         <div className="porfile">

@@ -8,13 +8,14 @@ import ProfileTeacherForm from './components/ProfileTeacherForm';
 
 import { BrowserRouter as Router, Switch, Route, NavLink, Redirect } from 'react-router-dom';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import axios from 'axios';
 
 axios.defaults.withCredentials = true;
 
 function App() {
+
   const [isAuth, setAuth] = useState(null);
 
   function checkAuth() {
@@ -27,11 +28,27 @@ function App() {
         setAuth(true);
       }
     });
-  }
+  };
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
+  const PrivateRoute = ({component: Component, ...rest}) => {
+    return (
+        <Route {...rest} render={props => (
+            isAuth ?
+                <Component {...props} />
+            : <Redirect to="/login" />
+        )} />
+    );
+  };
+
+  const PublicRoute = ({component: Component, restricted, ...rest}) => {
+    return (
+        <Route {...rest} render={props => (
+          isAuth && restricted ?
+                <Redirect to="/dashboard" />
+            : <Component {...props} />
+        )} />
+    );
+  };
 
   return (
     <div>
@@ -69,24 +86,46 @@ function App() {
         <Switch>
           <Redirect exact from="/" to="/dashboard" />
 
-          <Route exact path="/dashboard">
+          {/* <Route exact path="/dashboard">
             <Main isAuth={isAuth} />
-          </Route>
-          <Route exact path="/register">
+          </Route> */}
+
+          <PrivateRoute component={Main} path="/dashboard" exact />
+
+          {/* <Route exact path="/register">
             <Registration isAuth={isAuth} />
-          </Route>
-          <Route exact path="/achievements">
+          </Route> */}
+
+          <PublicRoute restricted={false} component={Registration} path="/register" exact />
+
+          {/* <Route exact path="/achievements">
             <Achievements />
-          </Route>
-          <Route exact path="/profile">
+          </Route> */}
+
+          <PrivateRoute component={Achievements} path="/achievements" exact />
+          
+
+          {/* <Route exact path="/profile">
             <Profile isAuth={isAuth} />
-          </Route>
-          <Route exact path="/login">
+          </Route> */}
+
+          <PrivateRoute component={Profile} path="/profile" exact />
+
+          {/* <Route exact path="/login">
             <Login isAuth={isAuth} />
-          </Route>
-          <Route exact path="/teacher-form">
+          </Route> */}
+
+          <PublicRoute restricted={false} component={Login} path="/login" exact />
+
+
+          
+          {/* <Route exact path="/teacher-form">
             <ProfileTeacherForm isAuth={isAuth} />
-          </Route>
+          </Route> */}
+
+          <PrivateRoute component={ProfileTeacherForm} path="/teacher-form" exact />
+
+
         </Switch>
       </Router>
     </div>

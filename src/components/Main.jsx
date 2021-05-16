@@ -6,8 +6,6 @@ import Popular from './Popular';
 
 import axios from 'axios';
 
-import { Redirect } from "react-router-dom";
-
 export default function Main(props) {
 
   const [profiles, setProfiles] = useState([]);
@@ -20,9 +18,6 @@ export default function Main(props) {
       };
     });
   }, []);
-
-  if (!props.isAuth) return (<Redirect to="/login" />);
-
 
     return (
         <main className="main">
