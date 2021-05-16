@@ -1,0 +1,51 @@
+.profile
+
+    &__card
+        background-color: #fff
+        padding: $gutter / 2
+        margin-bottom: $gutter
+        box-shadow: 0 0 3px 0 rgba($dark, 0.1)
+        border-radius: 15px
+
+    &__header
+        margin-bottom: $gutter
+
+    &__photo
+        width: 100%
+        height: auto
+        margin-bottom: $gutter / 1.5
+
+    &__info
+        display: flex
+        flex-direction: column
+        
+        span
+            margin-bottom: 0.5rem
+
+    &__subheader
+        margin-bottom: 0.9rem
+
+    &__description
+        line-height: 1.4
+
+    &__teacher
+        width: max-content
+        margin: 1rem auto 2rem auto
+        text-align: center
+        padding: 0.8rem 1.2rem
+        background-color: $accent
+        color: #fff
+        border-radius: 15px
+        border: none
+        box-shadow: 2px 2px 5px 0px rgba($dark,0.2)
+        transition: all 0.25s ease
+        &:focus, &:active, &:hover
+            box-shadow: 0px 0px 5px 0px rgba($dark,0.07)
+        &:disabled
+            opacity: 0.8
+            box-shadow: none
+            filter: grayscale(0.5)
+        &-wrapper
+            display: flex
+            justify-content: center
+            align-items: center
