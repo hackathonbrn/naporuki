@@ -8,7 +8,7 @@ import ProfileTeacherForm from './components/ProfileTeacherForm';
 
 import { BrowserRouter as Router, Switch, Route, NavLink, Redirect } from 'react-router-dom';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import axios from 'axios';
 
@@ -28,13 +28,18 @@ function App() {
         setAuth(true);
       }
     });
-    return isAuth;
   };
+
+  // useEffect(() => {
+    checkAuth();
+  // }, []);
+
+
 
   const PrivateRoute = ({component: Component, ...rest}) => {
     return (
         <Route {...rest} render={props => (
-          checkAuth() ?
+          isAuth ?
                 <Component {...props} />
             : <Redirect to="/login" />
         )} />
@@ -44,7 +49,7 @@ function App() {
   const PublicRoute = ({component: Component, restricted, ...rest}) => {
     return (
         <Route {...rest} render={props => (
-          checkAuth() && restricted ?
+          isAuth && restricted ?
                 <Redirect to="/dashboard" />
             : <Component {...props} />
         )} />
