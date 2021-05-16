@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -15,21 +16,21 @@ import (
 
 // User struct
 type User struct {
-	ID           interface{} `bson:"_id,omitempty" json:"_id,omitempty"`
-	Name         string      `bson:"name" json:"name"`
-	Phone        string      `bson:"phone" json:"phone"`
-	PasswordHash string      `bson:"password_hash" json:"password_hash"`
-	Subjects     []string    `bson:"subjects,omitempty" json:"subjects,omitempty"`
-	Achievements []string    `bson:"achievements,omitempty" json:"achievements,omitempty"`
-	Grades       []float32   `bson:"grades,omitempty" json:"grades,omitempty"`
-	Rating       float32     `bson:"rating,omitempty" json:"rating,omitempty"`
+	ID           primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
+	Name         string             `bson:"name" json:"name"`
+	Phone        string             `bson:"phone" json:"phone"`
+	PasswordHash string             `bson:"password_hash" json:"password_hash"`
+	Subjects     []string           `bson:"subjects,omitempty" json:"subjects,omitempty"`
+	Achievements []string           `bson:"achievements,omitempty" json:"achievements,omitempty"`
+	Grades       []float32          `bson:"grades,omitempty" json:"grades,omitempty"`
+	Rating       float32            `bson:"rating,omitempty" json:"rating,omitempty"`
 }
 
 // Profile struct
 type Profile struct {
-	ID   interface{} `bson:"_id,omitempty" json:"_id,omitempty"`
-	User User        `bson:"user" json:"user"`
-	Desc string      `bson:"desc" json:"desc"`
+	ID   primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
+	User User               `bson:"user" json:"user"`
+	Desc string             `bson:"desc" json:"desc"`
 }
 
 var client = setDBConnection()
@@ -122,14 +123,14 @@ func getUserProfileByPhone(phone string) (*Profile, error) {
 	return &p, nil
 }
 
-func addUser(u User) (interface{}, error) {
+func addUser(u User) (primitive.ObjectID, error) {
 	collection := client.Database("testing").Collection("users")
 	res, err := collection.InsertOne(context.TODO(), u)
 	if err != nil {
-		return nil, fmt.Errorf("cannot insert data: %v", err)
+		return primitive.ObjectID{}, fmt.Errorf("cannot insert data: %v", err)
 	}
 
-	return res.InsertedID, nil
+	return res.InsertedID.(primitive.ObjectID), nil
 }
 
 func addProfile(p Profile) error {
