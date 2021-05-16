@@ -163,7 +163,8 @@ func createTeacherProfile(w http.ResponseWriter, r *http.Request) {
 
 	user.Subjects = J.Subjects
 	collection := client.Database("testing").Collection("users")
-	_, err = collection.UpdateOne(context.TODO(), bson.D{{Key: "phone", Value: phone}}, user, nil)
+	update := bson.D{{Key: "$set", Value: bson.D{{Key: "user.subjects", Value: bson.A{user.Subjects}}}}}
+	_, err = collection.UpdateOne(context.TODO(), bson.D{{Key: "phone", Value: phone}}, update, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
